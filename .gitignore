@@ -11,6 +11,9 @@ node_modules
 # logs
 logs
 
+# ENV
+.env
+
 # IDEs and editors
 /.idea
 .project

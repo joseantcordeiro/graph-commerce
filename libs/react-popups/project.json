@@ -1,0 +1,23 @@
+{
+  "root": "libs/react-popups",
+  "sourceRoot": "libs/react-popups/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/react-popups/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/react-popups"],
+      "options": {
+        "jestConfig": "libs/react-popups/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

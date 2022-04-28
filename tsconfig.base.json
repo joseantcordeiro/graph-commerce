@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@graph-commerce/api-utils": ["libs/api-utils/src/index.ts"],
       "@graph-commerce/auth": ["libs/auth/src/index.ts"],
       "@graph-commerce/common": ["libs/common/src/index.ts"],
       "@graph-commerce/core": ["libs/core/src/index.ts"],
+      "@graph-commerce/react-popups": ["libs/react-popups/src/index.ts"],
       "@graph-commerce/search": ["libs/search/src/index.ts"],
       "@graph-commerce/upload": ["libs/upload/src/index.ts"]
     }

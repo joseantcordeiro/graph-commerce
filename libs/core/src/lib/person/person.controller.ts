@@ -157,11 +157,11 @@ export class PersonController {
       ...deleted.toJson(),
     };
   }
-
+/**
 	@Post('picture')
 	@UseGuards(AuthGuard)
 	@UseInterceptors(FileInterceptor('image'))
 	async uploadAvatar(@Session() session: SessionContainer, @UploadedFile() image: BufferedFile) {
 		return this.personService.uploadPicture(session.getUserId(), image);
-	}
+	} */
 }
