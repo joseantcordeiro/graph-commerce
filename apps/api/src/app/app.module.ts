@@ -14,7 +14,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { Neo4jModule } from 'nest-neo4j';
 import * as redisStore from 'cache-manager-redis-store';
 import { BullModule } from '@nestjs/bull';
-import { MinioModule } from 'nestjs-minio-client';
+import { MinioModule } from '@graph-commerce/upload';
 
 @Module({
   imports: [
@@ -60,16 +60,7 @@ import { MinioModule } from 'nestjs-minio-client';
 			}),
 			inject: [ConfigService],
 		}),
-    MinioModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        endPoint: configService.get('MINIO_ENDPOINT'),
-        port: parseInt(configService.get('MINIO_PORT')),
-        useSSL: false, // If on localhost, keep it at false. If deployed on https, change to true
-        accessKey: configService.get('MINIO_ACCESS_KEY'),
-        secretKey: configService.get('MINIO_SECRET_KEY'),
-      }),
-    }),
+    MinioModule.fromEnv({ isGlobal: true }),
     Neo4jModule.fromEnv(),
     AuthModule.fromEnv(),
     SearchModule.fromEnv(),

@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { MinioService } from 'nestjs-minio-client';
+import { MinioService } from './config/config.service';
 import { BufferedFile } from './entity/file.entity';
 import {v1 as uuidv1} from 'uuid';
 
@@ -103,11 +103,18 @@ export class MinioClientService {
 
   async delete(objetName: string, bucketName: string = this.bucketName) {
     this.client.removeObject(bucketName, objetName, function (err, _res) {
+      if (err) {
+        throw new HttpException(
+          'Error deleting file',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       if (err)
         throw new HttpException(
           'An error occured when deleting!',
           HttpStatus.BAD_REQUEST,
         );
-    });
+      }
+    );
   }
 }

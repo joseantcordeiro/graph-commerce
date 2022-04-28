@@ -1,3 +1,3 @@
-export * from './lib/minio.module';
-export * from './lib/minio-client.service';
+export * from './lib/config';
+export * from './lib';
 export * from './lib/entity/file.entity';
