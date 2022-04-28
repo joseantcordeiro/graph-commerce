@@ -15,26 +15,22 @@ Session.addAxiosInterceptors(axios);
 
 export function getApiDomain() {
   const apiPort = process.env['REACT_APP_API_PORT'] || 3333;
-  const apiUrl = process.env['REACT_APP_API_URL'] || `http://localhost:${apiPort}`;
-  return apiUrl;
+  return process.env['REACT_APP_API_URL'] || `http://localhost:${apiPort}`;
 }
 
 export function getWebsiteDomain() {
   const websitePort = process.env['REACT_APP_WEBSITE_PORT'] || 4200;
-  const websiteUrl = process.env['REACT_APP_WEBSITE_URL'] || `http://localhost:${websitePort}`;
-  return websiteUrl;
+  return process.env['REACT_APP_WEBSITE_URL'] || `http://localhost:${websitePort}`;
 }
 
 export function getApiVersion() {
 const apiVersion = process.env['REACT_APP_API_VERSION'] || 'v1';
-const apiPath = process.env['REACT_APP_API_PATH'] || `/api/${apiVersion}`;
-return apiPath;
+return process.env['REACT_APP_API_PATH'] || `/api/${apiVersion}`;
 }
 
 export function getMinioDomain() {
 const minioPort = process.env['REACT_APP_MINIO_PORT'] || 9000;
-const minioUrl = process.env['REACT_APP_MINIO_URL'] || `http://192.168.1.95:${minioPort}`;
-return minioUrl;
+return process.env['REACT_APP_MINIO_URL'] || `http://192.168.1.95:${minioPort}`;
 }
 
 export function CallAPIView() {

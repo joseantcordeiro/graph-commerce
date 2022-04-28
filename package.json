@@ -9,6 +9,7 @@
   },
   "private": true,
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.6.1",
     "@nestjs/bull": "^0.5.4",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.0.0",
@@ -25,6 +26,7 @@
     "minio": "^7.0.28",
     "nest-neo4j": "^0.1.5",
     "nest-winston": "^1.6.2",
+    "nodemailer": "^6.7.3",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-router-dom": "^6.3.0",
@@ -58,6 +60,7 @@
     "@types/cache-manager": "^3.4.3",
     "@types/jest": "27.4.1",
     "@types/node": "16.11.7",
+    "@types/nodemailer": "^6.4.4",
     "@types/react": "18.0.1",
     "@types/react-dom": "18.0.0",
     "@typescript-eslint/eslint-plugin": "~5.18.0",

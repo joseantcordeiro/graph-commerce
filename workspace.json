@@ -10,6 +10,7 @@
     "frontend-admin-e2e": "apps/frontend-admin-e2e",
     "react-popups": "libs/react-popups",
     "search": "libs/search",
-    "upload": "libs/upload"
+    "upload": "libs/upload",
+    "worker": "apps/worker"
   }
 }

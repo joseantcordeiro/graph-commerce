@@ -5,6 +5,7 @@ import { CurrencyModule } from './currency/currency.module';
 import { OrganizationModule } from './organization/organization.module';
 import { PersonModule } from './person/person.module';
 import { GroupModule } from './group/group.module';
+import { ChannelModule } from './channel/channel.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { GroupModule } from './group/group.module';
     PersonModule,
     OrganizationModule,
     GroupModule,
+    ChannelModule,
   ],
   controllers: [],
   providers: [],

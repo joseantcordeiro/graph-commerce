@@ -31,7 +31,7 @@ export class SupertokensService {
 
 												// Post sign up response, we check if it was successful
 												if (response.status === "OK") {
-														let { id, email } = response.user;
+														const { id, email } = response.user;
 
 														// These are the input form fields values that the user used while signing up
 														// let formFields = input.formFields;
