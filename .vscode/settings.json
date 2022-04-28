@@ -5,6 +5,7 @@
 		"createperson",
 		"emailpassword",
 		"findperson",
+		"formik",
 		"Meili",
 		"meilisearch",
 		"minio",

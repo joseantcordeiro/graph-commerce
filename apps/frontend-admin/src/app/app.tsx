@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import Home from './home/home';
 import { SessionExpiredPopup } from '@graph-commerce/react-popups';
 import Footer from './common/footer';
+import Nav from './common/nav';
+import Profile from "./account/profile";
 
 SuperTokens.init({
   appInfo: {
@@ -108,7 +110,7 @@ export function App() {
     <div className="App">
         <Router>
           <div className="fill">
-
+            {!doesSessionExist ? <Nav currentUser={user} organization={organization} /> : null}
             <Routes>
               {/* This shows the login UI on "/auth" route */}
               {getSuperTokensRoutesForReactRouterDom(require("react-router-dom"))}
@@ -124,6 +126,21 @@ export function App() {
                       updateShowSessionExpiredPopup(true);
                     }}>
                     <Home currentUser={user} />
+                    {showSessionExpiredPopup && <SessionExpiredPopup />}
+                  </EmailPassword.EmailPasswordAuth>
+                }
+              />
+              <Route
+                path="/account/profile"
+                element={
+                                /* This protects the "/" route so that it shows
+                                <Home /> only if the user is logged in.
+                                Else it redirects the user to "/auth" */
+                  <EmailPassword.EmailPasswordAuth
+                    onSessionExpired={() => {
+                      updateShowSessionExpiredPopup(true);
+                    }}>
+                    <Profile currentUser={user}  />
                     {showSessionExpiredPopup && <SessionExpiredPopup />}
                   </EmailPassword.EmailPasswordAuth>
                 }
