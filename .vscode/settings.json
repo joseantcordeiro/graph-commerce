@@ -1,0 +1,20 @@
+{
+	"cSpell.words": [
+		"createindex",
+		"createorganization",
+		"createperson",
+		"emailpassword",
+		"findperson",
+		"Meili",
+		"meilisearch",
+		"minio",
+		"nestjs",
+		"nextjs",
+		"searchdocument",
+		"sessioninfo",
+		"supertokens",
+		"updateorganization",
+		"updateperson",
+		"uuidv"
+	]
+}

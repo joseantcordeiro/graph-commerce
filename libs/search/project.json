@@ -1,0 +1,33 @@
+{
+  "root": "libs/search",
+  "sourceRoot": "libs/search/src",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/search",
+        "tsConfig": "libs/search/tsconfig.lib.json",
+        "packageJson": "libs/search/package.json",
+        "main": "libs/search/src/index.ts",
+        "assets": ["libs/search/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/search/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/search"],
+      "options": {
+        "jestConfig": "libs/search/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

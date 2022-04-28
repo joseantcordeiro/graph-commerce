@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "projects": {
+    "api": "apps/api",
+    "auth": "libs/auth",
+    "common": "libs/common",
+    "core": "libs/core",
+    "frontend-admin": "apps/frontend-admin",
+    "frontend-admin-e2e": "apps/frontend-admin-e2e",
+    "search": "libs/search",
+    "upload": "libs/upload"
+  }
+}
