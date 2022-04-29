@@ -10,8 +10,13 @@
     "frontend-admin-e2e": "apps/frontend-admin-e2e",
     "health": "libs/health",
     "minio": "libs/minio",
+    "order": "libs/order",
+    "product": "libs/product",
     "react-popups": "libs/react-popups",
     "search": "libs/search",
+    "tickets": "libs/tickets",
+    "tickets-admin": "apps/tickets/admin",
+    "tickets-admin-e2e": "apps/tickets/admin-e2e",
     "worker": "apps/worker"
   }
 }

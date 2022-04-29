@@ -1,0 +1,114 @@
+{
+  "root": "apps/tickets/admin",
+  "sourceRoot": "apps/tickets/admin/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/tickets/admin",
+        "index": "apps/tickets/admin/src/index.html",
+        "baseHref": "/",
+        "main": "apps/tickets/admin/src/main.tsx",
+        "polyfills": "apps/tickets/admin/src/polyfills.ts",
+        "tsConfig": "apps/tickets/admin/tsconfig.app.json",
+        "assets": [
+          "apps/tickets/admin/src/favicon.ico",
+          "apps/tickets/admin/src/assets"
+        ],
+        "styles": ["apps/tickets/admin/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/tickets/admin/src/environments/environment.ts",
+              "with": "apps/tickets/admin/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "tickets-admin:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "tickets-admin:build:development"
+        },
+        "production": {
+          "buildTarget": "tickets-admin:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tickets/admin/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/tickets/admin"],
+      "options": {
+        "jestConfig": "apps/tickets/admin/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "storybook": {
+      "executor": "@nrwl/storybook:storybook",
+      "options": {
+        "uiFramework": "@storybook/react",
+        "port": 4400,
+        "config": {
+          "configFolder": "apps/tickets/admin/.storybook"
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@nrwl/storybook:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "uiFramework": "@storybook/react",
+        "outputPath": "dist/storybook/tickets-admin",
+        "config": {
+          "configFolder": "apps/tickets/admin/.storybook"
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

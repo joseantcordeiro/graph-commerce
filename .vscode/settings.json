@@ -1,5 +1,8 @@
 {
 	"cSpell.words": [
+		"bulma",
+		"checkin",
+		"creategroup",
 		"createindex",
 		"createorganization",
 		"createperson",
@@ -8,6 +11,7 @@
 		"emailpassword",
 		"findperson",
 		"formik",
+		"INPERSON",
 		"Meili",
 		"meilisearch",
 		"minio",
@@ -17,8 +21,10 @@
 		"organizationdefault",
 		"searchdocument",
 		"sessioninfo",
+		"setis",
 		"successview",
 		"supertokens",
+		"updategroup",
 		"updateorganization",
 		"updateperson",
 		"uuidv"

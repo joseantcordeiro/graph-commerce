@@ -1,0 +1,28 @@
+{
+  "root": "apps/tickets/admin-e2e",
+  "sourceRoot": "apps/tickets/admin-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/tickets/admin-e2e/cypress.json",
+        "devServerTarget": "tickets-admin:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "tickets-admin:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tickets/admin-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["tickets-admin"]
+}

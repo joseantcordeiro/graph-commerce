@@ -21,8 +21,11 @@
       "@graph-commerce/core": ["libs/core/src/index.ts"],
       "@graph-commerce/health": ["libs/health/src/index.ts"],
       "@graph-commerce/minio": ["libs/minio/src/index.ts"],
+      "@graph-commerce/order": ["libs/order/src/index.ts"],
+      "@graph-commerce/product": ["libs/product/src/index.ts"],
       "@graph-commerce/react-popups": ["libs/react-popups/src/index.ts"],
-      "@graph-commerce/search": ["libs/search/src/index.ts"]
+      "@graph-commerce/search": ["libs/search/src/index.ts"],
+      "@graph-commerce/tickets": ["libs/tickets/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

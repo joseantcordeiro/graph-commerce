@@ -8,7 +8,7 @@ import { Group } from './entity/group.entity';
 export class GroupService {
   constructor(private readonly neo4jService: Neo4jService) {}
 
-  async get(groupId: string): Promise<Group[] | any> {
+  async get(groupId: string): Promise<Group[] | unknown> {
     const res = await this.neo4jService
       .read(
         `
@@ -20,7 +20,7 @@ export class GroupService {
 			return res.records.length ? res.records.map((row) => new Group(row.get('g'))) : false;
   }
 
-	async list(userId: string): Promise<Group[] | any> {
+	async list(userId: string): Promise<Group[] | unknown> {
 		const res = await this.neo4jService.read(
 			`
 			MATCH (p:Person {id: $userId})-[:WORKS_IN]->(o:Organization)
@@ -35,7 +35,7 @@ export class GroupService {
 
   async create(userId: string,
     properties: CreateGroupDto,
-  ): Promise<Group[] | any> {
+  ): Promise<Group[] | unknown> {
     const res = await this.neo4jService.write(
       `
 			MATCH (o:Organization { id: $properties.organizationId })
@@ -55,7 +55,7 @@ export class GroupService {
 
   async update(
     properties: UpdateGroupDto,
-  ): Promise<Group[] | any> {
+  ): Promise<Group[] | unknown> {
     const res = await this.neo4jService.write(
       `
 		MATCH (g:Group {id: $properties.groupId})-[r:BELONGS_TO]->(o:Organization)
@@ -71,7 +71,7 @@ export class GroupService {
     return res.records.length ? res.records.map((row) => new Group(row.get('g'))) : false;
   }
 
-  async delete(userId: string, groupId: string): Promise<Group[] | any> {
+  async delete(userId: string, groupId: string): Promise<Group[] | unknown> {
     const res = await this.neo4jService.write(
       `
 			MATCH (g:Group {id: $groupId})-[r:BELONGS_TO]->(o:Organization)
@@ -85,7 +85,7 @@ export class GroupService {
 		return res.records.length ? res.records.map((row) => new Group(row.get('g'))) : false;
   }
 
-	async join(userId: string, memberId: string, groupId: string): Promise<Group[] | any> {
+	async join(userId: string, memberId: string, groupId: string): Promise<Group[] | unknown> {
 		const res = await this.neo4jService.write(
 			`
 			MATCH (p:Person {id: $$memberId}), (g:Group {id: $groupId})

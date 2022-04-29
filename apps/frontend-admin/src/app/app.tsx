@@ -102,7 +102,6 @@ export function App() {
 	}
 
 	useEffect(() => {
-    if (!doesSessionExist)
 		  loadUserData();
 	}, []);
 
