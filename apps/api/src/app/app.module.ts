@@ -15,9 +15,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { Neo4jModule } from 'nest-neo4j';
 import * as redisStore from 'cache-manager-redis-store';
 import { BullModule } from '@nestjs/bull';
-import { MinioModule } from '@graph-commerce/minio';
-import { HealthController } from '@graph-commerce/health';
-import { DatabaseHealthIndicator } from '@graph-commerce/health';
+import { HealthController, DatabaseHealthIndicator } from '@graph-commerce/health';
 
 @Module({
   imports: [
@@ -64,7 +62,6 @@ import { DatabaseHealthIndicator } from '@graph-commerce/health';
 			inject: [ConfigService],
 		}),
     TerminusModule,
-    MinioModule.fromEnv({ isGlobal: true }),
     Neo4jModule.fromEnv(),
     AuthModule.fromEnv(),
     SearchModule.fromEnv(),
