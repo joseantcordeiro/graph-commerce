@@ -3,7 +3,8 @@ import { Neo4jService } from 'nest-neo4j';
 import { CreatePersonDto } from './dto/createperson.dto';
 import { UpdatePersonDto } from './dto/updateperson.dto';
 import { Person } from './entity/person.entity';
-import { MinioClientService, BufferedFile } from '@graph-commerce/upload';
+import { MinioClientService } from '../upload/minio-client.service';
+import { BufferedFile } from '../upload/entity/image.entity';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { FindPersonDto } from '../organization/dto/findperson.dto';
@@ -14,7 +15,7 @@ export class PersonService {
   constructor(
 		@InjectQueue('picture') private readonly pictureQueue: Queue,
     private readonly neo4jService: Neo4jService,
-		// private minioClientService: MinioClientService,
+		private minioClientService: MinioClientService,
   ) {}
   /**
   async userTeams(userId: string): Promise<Response | undefined> {
@@ -164,7 +165,7 @@ export class PersonService {
       { userId },
     );
   }
-/**
+
 	async uploadPicture(userId: string, image: BufferedFile): Promise<any> {
 		const uploaded_image = await this.minioClientService.upload(image);
 		const picture = uploaded_image.url;
@@ -186,5 +187,5 @@ export class PersonService {
 			message: "Profile picture updated successfully.",
 			profile_picture: res.records[0].get('profile_picture')
 		};
-	} */
+	}
 }

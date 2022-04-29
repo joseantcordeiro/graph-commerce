@@ -1,8 +1,8 @@
 import { Module, DynamicModule, Provider } from '@nestjs/common';
-import { MinioService } from './config.service';
-import { MINIO_CONFIG_OPTIONS } from '../constants';
-import { MinioConnectionAsyncOptions } from '../interfaces/minio.async-options.interfaces';
-import { MinioOptionsFactory } from '../interfaces/minio.async-options.factory.interface';
+import { MinioService } from './minio.service';
+import { MINIO_CONFIG_OPTIONS } from './constants';
+import { MinioConnectionAsyncOptions } from './interface/minio.async-options.interfaces';
+import { MinioOptionsFactory } from './interface/minio.async-options.factory.interface';
 import { ClientOptions } from 'minio';
 import { ConfigService } from '@nestjs/config';
 
@@ -51,7 +51,7 @@ export class MinioModule {
     return {
       provide: MINIO_CONFIG_OPTIONS,
       useFactory: async (optionsFactory: MinioOptionsFactory) =>
-        optionsFactory.createPiConnectionOptions(),
+        await optionsFactory.createPiConnectionOptions(),
       inject: [options.useExisting || options.useClass],
     };
   }
@@ -78,4 +78,6 @@ export class MinioModule {
     };
 
   }
+
 }
+

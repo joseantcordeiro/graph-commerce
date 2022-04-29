@@ -1,0 +1,33 @@
+{
+  "root": "libs/minio",
+  "sourceRoot": "libs/minio/src",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/minio",
+        "tsConfig": "libs/minio/tsconfig.lib.json",
+        "packageJson": "libs/minio/package.json",
+        "main": "libs/minio/src/index.ts",
+        "assets": ["libs/minio/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/minio/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/minio"],
+      "options": {
+        "jestConfig": "libs/minio/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

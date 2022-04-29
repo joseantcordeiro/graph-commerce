@@ -8,9 +8,10 @@
     "core": "libs/core",
     "frontend-admin": "apps/frontend-admin",
     "frontend-admin-e2e": "apps/frontend-admin-e2e",
+    "health": "libs/health",
+    "minio": "libs/minio",
     "react-popups": "libs/react-popups",
     "search": "libs/search",
-    "upload": "libs/upload",
     "worker": "apps/worker"
   }
 }

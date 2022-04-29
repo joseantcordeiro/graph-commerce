@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'upload',
+  displayName: 'minio',
   preset: '../../jest.preset.ts',
   globals: {
     'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/libs/upload',
+  coverageDirectory: '../../coverage/libs/minio',
 };

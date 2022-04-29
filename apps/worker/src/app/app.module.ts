@@ -19,7 +19,7 @@ import { QueueProcessorModule } from './queue-processor.module';
       useFactory: (configService: ConfigService) => ({
         transports: [
           new winston.transports.File({
-            filename: `${process.cwd()}/${configService.get('LOG_PATH')}`,
+            filename: `${process.cwd()}/${configService.get('LOG_WORKER_PATH')}`,
           }),
           new winston.transports.Console({
             format: winston.format.combine(

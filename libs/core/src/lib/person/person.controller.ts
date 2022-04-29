@@ -18,7 +18,7 @@ import { PersonService } from './person.service';
 import { AuthGuard, Session } from '@graph-commerce/auth';
 import { SessionContainer } from 'supertokens-node/recipe/session';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { BufferedFile } from '@graph-commerce/upload';
+import { BufferedFile } from '../upload/entity/image.entity';
 import { FindPersonDto } from '../organization/dto/findperson.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
@@ -157,11 +157,11 @@ export class PersonController {
       ...deleted.toJson(),
     };
   }
-/**
+
 	@Post('picture')
 	@UseGuards(AuthGuard)
 	@UseInterceptors(FileInterceptor('image'))
 	async uploadAvatar(@Session() session: SessionContainer, @UploadedFile() image: BufferedFile) {
 		return this.personService.uploadPicture(session.getUserId(), image);
-	} */
+	}
 }
