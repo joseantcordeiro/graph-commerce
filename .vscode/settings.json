@@ -4,6 +4,7 @@
 		"createorganization",
 		"createperson",
 		"cssmodule",
+		"datetime",
 		"emailpassword",
 		"findperson",
 		"formik",

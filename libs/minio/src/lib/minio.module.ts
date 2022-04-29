@@ -51,7 +51,7 @@ export class MinioModule {
     return {
       provide: MINIO_CONFIG_OPTIONS,
       useFactory: async (optionsFactory: MinioOptionsFactory) =>
-        await optionsFactory.createPiConnectionOptions(),
+        optionsFactory.createPiConnectionOptions(),
       inject: [options.useExisting || options.useClass],
     };
   }

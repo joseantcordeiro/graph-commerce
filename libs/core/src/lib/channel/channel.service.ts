@@ -8,7 +8,7 @@ import { Channel } from './entity/channel.entity';
 export class ChannelService {
   constructor(private readonly neo4jService: Neo4jService) {}
 
-  async get(channelId: string): Promise<Channel[] | any> {
+  async get(channelId: string): Promise<Channel[] | unknown> {
     const res = await this.neo4jService
       .read(
         `
@@ -20,7 +20,7 @@ export class ChannelService {
 			return res.records.length ? res.records.map((row) => new Channel(row.get('c'))) : false;
   }
 
-	async list(userId: string): Promise<Channel[] | any> {
+	async list(userId: string): Promise<Channel[] | unknown> {
 		const res = await this.neo4jService.read(
 			`
 			MATCH (p:Person {id: $userId})-[:WORKS_IN]->(o:Organization)
@@ -35,7 +35,7 @@ export class ChannelService {
 
   async create(userId: string,
     properties: CreateChannelDto,
-  ): Promise<Channel[] | any> {
+  ): Promise<Channel[] | unknown> {
     const res = await this.neo4jService.write(
       `
 			MATCH (o:Organization { id: $properties.organizationId }),(a:Currency { code: $properties.defaultCurrency }), (c:Country { iso_2: $properties.defaultCountry })
@@ -57,7 +57,7 @@ export class ChannelService {
 
   async update(
     properties: UpdateChannelDto,
-  ): Promise<Channel[] | any> {
+  ): Promise<Channel[] | unknown> {
     const res = await this.neo4jService.write(
       `
 		MATCH (c:Channel {id: $properties.channelId})-[r:BELONGS_TO]->(o:Organization)
@@ -73,7 +73,7 @@ export class ChannelService {
     return res.records.length ? res.records.map((row) => new Channel(row.get('c'))) : false;
   }
 
-  async delete(userId, properties): Promise<Channel[] | any> {
+  async delete(userId, properties): Promise<Channel[] | unknown> {
     const res = await this.neo4jService.write(
       `
 			MATCH (c:Channel {id: $properties.channelId})-[r:BELONGS_TO]->(o:Organization)

@@ -20,7 +20,6 @@ export class RolesGuard implements CanActivate {
     }
 
 		const ctx = context.switchToHttp();
-    let err = undefined;
     const req = ctx.getRequest();
 		const res = ctx.getResponse();
 		await superTokensNextWrapper(
@@ -30,7 +29,7 @@ export class RolesGuard implements CanActivate {
 			req,
 			res
 		);
-		const userId = req.session!.getUserId();
+		const userId = req.session?.getUserId();
 
 		const roles = await this.roles(userId);
 		console.log(roles);
