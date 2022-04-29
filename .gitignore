@@ -13,6 +13,7 @@ logs
 
 # ENV
 .env
+.env.local
 
 # IDEs and editors
 /.idea

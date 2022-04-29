@@ -1,0 +1,11 @@
+version: '3'
+services:
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: always
+    logging:
+      driver: 'none'
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui

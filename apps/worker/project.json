@@ -46,6 +46,13 @@
         "jestConfig": "apps/worker/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "push": false,
+        "tags": ["graph-commerce/worker:latest", "graph-commerce/worker:v1"]
+      }
     }
   },
   "tags": []
