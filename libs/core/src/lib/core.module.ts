@@ -6,9 +6,11 @@ import { OrganizationModule } from './organization/organization.module';
 import { PersonModule } from './person/person.module';
 import { GroupModule } from './group/group.module';
 import { ChannelModule } from './channel/channel.module';
+import { MetadataModule } from './metadata/metadata.module';
 
 @Module({
   imports: [
+    MetadataModule,
     CountryModule,
     LanguageModule,
     CurrencyModule,
