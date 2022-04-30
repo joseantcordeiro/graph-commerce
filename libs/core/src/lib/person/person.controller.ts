@@ -60,10 +60,8 @@ export class PersonController {
   async getPerson(@Session() session: SessionContainer) {
     const userId = session.getUserId();
     const person = await this.personService.get(userId);
-		if (Array.isArray(person)) {
-			return {
-				results: person.map(m => m.toJson()),
-			};
+		if (person !== false) {
+			return person;
 		}
 		throw new HttpException('Something is wrong, try to refresh the session.', HttpStatus.NOT_FOUND);
   }

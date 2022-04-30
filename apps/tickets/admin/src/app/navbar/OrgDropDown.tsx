@@ -1,13 +1,13 @@
 import axios from "axios";
 import { Component } from "react";
 import Session from "supertokens-auth-react/recipe/session";
-import { getApiDomain, getApiVersion } from "@graph-commerce/api-utils";
+import { API_URL, CurrentUser } from "@graph-commerce/api-utils";
 import cx from "classnames";
 
 Session.addAxiosInterceptors(axios);
 
 interface IProps {
-	organization: { name: string; id: string };
+	currentUser: CurrentUser;
 }
 
 interface IState {
@@ -22,7 +22,7 @@ export default class OrgDropDown extends Component<IProps, IState> {
 
 	override async componentDidMount() {
     try {
-      const response = await axios.get(getApiDomain() + getApiVersion() + "/organization");
+      const response = await axios.get(API_URL + "/organization");
 			if (response.statusText !== "OK") {
         throw Error(response.statusText);
       }
@@ -41,7 +41,8 @@ export default class OrgDropDown extends Component<IProps, IState> {
 
 			<div className="navbar-dropdown">
 			{this.state.data.map(item => (
-				<a className={cx("navbar-item", item.id === this.props.organization.id && "is-active")} id={item.id} >
+				// eslint-disable-next-line jsx-a11y/anchor-is-valid
+				<a className={cx("navbar-item", item.id === this.props.currentUser.defaultOrganizationId && "is-active")} id={item.id} >
 					{item.name}
 				</a>
 			))}

@@ -46,14 +46,17 @@ export class MetadataService {
 		return res.records.length ? res.records.map((row) => new Metadata(row.get('m'))) : false;
 	}
 
-	async getMetadata(properties: GetMetadataDto): Promise<Metadata[] | unknown> {
+	async getMetadata(properties: GetMetadataDto): Promise<unknown> {
 		const res = await this.neo4jService.read(
 				`MATCH (n { id: $properties.objectId })-[r:HAS_METADATA]->(m:Metadata { key: $properties.key })
-				 RETURN m
+				 RETURN m {
+           .*,
+           objectId: $properties.objectId
+         } AS metadata
 				`,
 				{	properties },
 		);
-		return res.records.length ? res.records.map((row) => new Metadata(row.get('m'))) : false;
+		return res.records.length ? res.records[0].get('metadata') : false;
 	}
 
 	async getPublicMetadata(objectId: string): Promise<Metadata[] | unknown> {

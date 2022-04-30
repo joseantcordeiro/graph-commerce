@@ -10,7 +10,6 @@ import axios from 'axios';
 /* eslint-disable-next-line */
 export interface NavbarProps {
   currentUser: CurrentUser;
-  currentOrganization: { name: string; id: string}
 }
 
 export function Navbar(props: NavbarProps) {
@@ -69,9 +68,9 @@ export function Navbar(props: NavbarProps) {
           <span className="icon">
               <i className="fa fa-home"></i>
             </span>
-          <span>{props.currentOrganization.name}</span>
+          <span>{props.currentUser.defaultOrganizationName}</span>
           </a>
-          <OrgDropDown organization={props.currentOrganization}/>
+          <OrgDropDown currentUser={props.currentUser}/>
 
           <a className="navbar-item" href="/group">
             Groups

@@ -14,7 +14,6 @@ import Navbar from '../navbar/navbar';
 /* eslint-disable-next-line */
 export interface AccountProps {
   currentUser: CurrentUser;
-  currentOrganization: { name: string; id: string};
 }
 
 interface Languages {
@@ -56,7 +55,7 @@ export function Account(props: AccountProps) {
 
   return (
     <div className="container">
-      <Navbar currentUser={props.currentUser} currentOrganization={props.currentOrganization}/>
+      <Navbar currentUser={props.currentUser}/>
 				<div className="columns is-centered">
 					<div className="column is-one-quarter">
 						<div className="box">

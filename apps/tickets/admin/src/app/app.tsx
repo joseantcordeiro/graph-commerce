@@ -5,12 +5,14 @@ import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
 import SuperTokens, { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react";
 import Session from "supertokens-auth-react/recipe/session";
 import { SessionExpiredPopup } from '@graph-commerce/react-popups';
-import { CurrentUser, getApiDomain, getApiVersion, getWebsiteDomain } from '@graph-commerce/api-utils';
+import { CurrentUser, getApiDomain, getWebsiteDomain, API_URL } from '@graph-commerce/api-utils';
 import { useEffect, useState } from 'react';
 import Home from './home/home';
 import axios from 'axios';
 import Account from './account/account';
 import Footer from './footer/footer';
+import Group from './group/group';
+import Settings from './settings/settings';
 
 SuperTokens.init({
   appInfo: {
@@ -68,30 +70,23 @@ SuperTokens.init({
   ],
 });
 
-const initialGlobalState: CurrentUser = { userId: "", name: "", email: "", picture: ""};
+Session.addAxiosInterceptors(axios);
+const initialGlobalState: CurrentUser = {
+  userId: "", name: "", email: "", picture: "", defaultOrganizationId: "",
+  defaultOrganizationName: ""
+};
 
 export function App() {
   const [ showSessionExpiredPopup, updateShowSessionExpiredPopup ] = useState(false);
   const [ currentUser, updateUser ] = useState(initialGlobalState);
-	const [ currentOrganization, setOrganization ] = useState({ name: "", id: "" });
 
   async function loadUserData() {
 		try {
-			const response = await axios.get(getApiDomain() + getApiVersion() + "/person");
+			const response = await axios.get(API_URL + "/person");
 			if (response.statusText !== "OK") {
 				throw Error(response.statusText);
 			}
-			updateUser( {
-				userId: response.data.results[0].id,
-				name: response.data.results[0].name,
-				email: response.data.results[0].email,
-				picture: response.data.results[0].picture,
-			} );
-			const res = await axios.get(getApiDomain() + getApiVersion() + "/person/organization");
-			if (res.statusText !== "OK") {
-				throw Error(res.statusText);
-			}
-			setOrganization( { name: res.data.results[0].name, id: res.data.results[0].id } );
+			updateUser( response.data );
 		} catch (err) {
 			console.log(err);
 		}
@@ -114,7 +109,7 @@ export function App() {
               onSessionExpired={() => {
                 updateShowSessionExpiredPopup(true);
               }}>
-              <Home currentUser={currentUser} currentOrganization={currentOrganization}/>
+              <Home currentUser={currentUser}/>
               {showSessionExpiredPopup && <SessionExpiredPopup />}
             </EmailPassword.EmailPasswordAuth>
           }
@@ -126,7 +121,31 @@ export function App() {
               onSessionExpired={() => {
                 updateShowSessionExpiredPopup(true);
               }}>
-              <Account currentUser={currentUser} currentOrganization={currentOrganization}/>
+              <Account currentUser={currentUser}/>
+              {showSessionExpiredPopup && <SessionExpiredPopup />}
+            </EmailPassword.EmailPasswordAuth>
+          }
+        />
+        <Route
+          path="/group"
+          element={
+            <EmailPassword.EmailPasswordAuth
+              onSessionExpired={() => {
+                updateShowSessionExpiredPopup(true);
+              }}>
+              <Group currentUser={currentUser}/>
+              {showSessionExpiredPopup && <SessionExpiredPopup />}
+            </EmailPassword.EmailPasswordAuth>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <EmailPassword.EmailPasswordAuth
+              onSessionExpired={() => {
+                updateShowSessionExpiredPopup(true);
+              }}>
+              <Settings currentUser={currentUser}/>
               {showSessionExpiredPopup && <SessionExpiredPopup />}
             </EmailPassword.EmailPasswordAuth>
           }

@@ -66,11 +66,8 @@ export class MetadataController {
     @Body() properties: GetMetadataDto,
   ) {
     const metadata = await this.metadataService.getMetadata(properties);
-		if (Array.isArray(metadata)) {
-			return {
-				objectId: properties.objectId,
-				metadata: metadata.map(m => m.toJson()),
-			};
+		if (metadata !== false) {
+			return metadata;
 		}
 		throw new HttpException('Metadata couldn\'t be found', HttpStatus.NOT_FOUND);
   }

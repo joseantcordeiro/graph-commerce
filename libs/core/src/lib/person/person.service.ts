@@ -36,15 +36,22 @@ export class PersonService {
   }
 */
 
-  async get(userId: string): Promise<Person[] | any> {
+  async get(userId: string): Promise<any> {
     const res = await this.neo4jService.read(
       `
-					MATCH (p:Person {id: $userId})
-					RETURN p
+      MATCH (p:Person { id: $userId })-[:HAS_METADATA]->(m:Metadata { key: 'DEFAULT_ORGANIZATION' })
+			WITH p, m
+			MATCH (o:Organization { id: m.value })
+      RETURN p {
+        .*,
+        defaultOrganizationId: o.id,
+        defaultOrganizationName: o.name
+      } AS person
 			`,
       { userId },
     );
-    return res.records.length ? res.records.map((row) => new Person(row.get('p'))) : false;
+
+    return res.records.length ? res.records[0].get('person') : false;
   }
 
   async find(properties: FindPersonDto): Promise<Person[] | boolean> {
