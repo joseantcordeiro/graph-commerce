@@ -88,7 +88,7 @@ export class GroupService {
 	async join(userId: string, memberId: string, groupId: string): Promise<Group[] | unknown> {
 		const res = await this.neo4jService.write(
 			`
-			MATCH (p:Person {id: $$memberId}), (g:Group {id: $groupId})
+			MATCH (p:Person {id: $memberId}), (g:Group {id: $groupId})
 			CREATE (p)-[:MEMBER_IN { addedBy: $userId, createdAt: datetime(), active: true, deleted: false }]->(g)
 			RETURN g
 			`,

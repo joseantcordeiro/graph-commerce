@@ -9,6 +9,7 @@
     "frontend-admin": "apps/frontend-admin",
     "frontend-admin-e2e": "apps/frontend-admin-e2e",
     "health": "libs/health",
+    "logger": "libs/logger",
     "minio": "libs/minio",
     "order": "libs/order",
     "product": "libs/product",

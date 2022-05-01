@@ -115,8 +115,8 @@ export class PersonService {
 						CREATE (p)-[:HAS_DEFAULT_LANGUAGE]->(l)
 						CREATE (m:Metadata { key: 'DEFAULT_ORGANIZATION', value: '' })
 						CREATE (p)-[:HAS_METADATA { private: false }]->(m)
-						CREATE (n:Metadata { key: 'ROLES', value: '[]' })
-						CREATE (p)-[:HAS_METADATA { addedBy: $properties.userId, createdAt: datetime(), private: true }]->(n)
+						CREATE (n:Metadata { key: 'ROLES', value: [] })
+						CREATE (p)-[:HAS_METADATA { createdBy: $properties.userId, createdAt: datetime(), private: true }]->(n)
             RETURN p
         `,
         {

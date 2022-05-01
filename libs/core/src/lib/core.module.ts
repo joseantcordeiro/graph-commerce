@@ -4,9 +4,10 @@ import { LanguageModule } from './language/language.module';
 import { CurrencyModule } from './currency/currency.module';
 import { OrganizationModule } from './organization/organization.module';
 import { PersonModule } from './person/person.module';
-import { GroupModule } from './group/group.module';
 import { ChannelModule } from './channel/channel.module';
 import { MetadataModule } from './metadata/metadata.module';
+import { ConfigurationModule } from './configuration/configuration.module';
+import { TeamModule } from './team/team.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { MetadataModule } from './metadata/metadata.module';
     CurrencyModule,
     PersonModule,
     OrganizationModule,
-    GroupModule,
+    TeamModule,
     ChannelModule,
+    ConfigurationModule,
   ],
   controllers: [],
   providers: [],

@@ -6,6 +6,7 @@ import { PersonProcessor } from './processor/person.processor';
 import { PictureProcessor } from './processor/picture.processor';
 import { OrganizationProcessor } from './processor/organization.processor';
 import { MemberProcessor } from './processor/member.processor';
+import { TeamProcessor } from './processor/team.processor';
 
 @Module({
   imports: [
@@ -24,6 +25,9 @@ import { MemberProcessor } from './processor/member.processor';
 		BullModule.registerQueue({
       name: 'organization',
     }),
+    BullModule.registerQueue({
+      name: 'team',
+    }),
 		BullModule.registerQueue({
       name: 'member',
     }),
@@ -35,6 +39,7 @@ import { MemberProcessor } from './processor/member.processor';
 		SearchProcessor,
 		OrganizationProcessor,
 		MemberProcessor,
+    TeamProcessor,
 	],
 })
 export class QueueProcessorModule {}

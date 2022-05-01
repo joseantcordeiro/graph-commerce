@@ -7,6 +7,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { Channel } from '@graph-commerce/core';
 import { SearchService, CreateIndexDto } from '@graph-commerce/search';
+import { OrganizationDefaultConfig } from '../config/organization-default-config';
 
 @Processor('organization')
 export class OrganizationProcessor {
@@ -26,6 +27,21 @@ export class OrganizationProcessor {
 
 		}
 
+    async addConfigMetadata(objectId: string) {
+      OrganizationDefaultConfig.forEach (async function(value, key) {
+        await this.neo4jService.write(
+          `
+          MATCH (o:Organization { id: $objectId })
+          CREATE (m:Metadata { key: $key, value: $value })
+          CREATE (o)-[:HAS_METADATA { createdAt: datetime(), private: true, config: true }]->(m)
+          RETURN m
+          `,
+          { objectId, key, value },
+        );
+        this.logger.info('[OrganizationProcessor] Metadata ' + key + ' added to ' + objectId);
+      }.bind(this));
+    }
+
 	@Process('update')
   async update(job: Job) {
     const doc: Document = job.data.organization;
@@ -39,6 +55,7 @@ export class OrganizationProcessor {
 		let index = "organization";
 		this.searchService.addDocuments(index, [doc[0]])
 		const objectId = doc[0].id;
+    this.addConfigMetadata(objectId);
 		const createIndex: CreateIndexDto = {
 			uid: "group-" + objectId,
 			primaryKey: "id",
