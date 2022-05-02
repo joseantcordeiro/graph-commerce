@@ -9,8 +9,10 @@ export class CreateCategoryDto {
 	organizationId: string;
 	name: string;
 	description: string;
+  categoryCode: string;
   visibility: Visibility = Visibility.PUBLIC;
   allocationStrategy: AllocationStrategy = AllocationStrategy.FIXED;
+  maxTickets?: number;
   onSaleFrom: Date;
   onSaleUntil: Date;
   price: number;

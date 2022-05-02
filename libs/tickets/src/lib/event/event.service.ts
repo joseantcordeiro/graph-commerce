@@ -13,8 +13,9 @@ export class EventService {
       MATCH (o:Organization { id: $properties.organizationId })
       WITH o, randomUUID() AS uuid
       CREATE (e:Event { id: uuid, name: $properties.name, description: $properties.description, type: $properties.type })
+      CREATE (l:Location { id: randomUUID(), name: $properties.location, location: Point($properties.latitude, $properties.longitude) })
+      CREATE (e)-[:LOCATED_IN]->(l)
       CREATE (o)<-[:BELONGS_TO { createdBy: $properties.createdBy, createdAt: datetime(), active: $properties.active, deleted: false }]-(e)
-      CREATE (e)<-[:LOCATED_AT { latitude: $properties.latitude, longitude: $properties.longitude }]-(o)
       CREATE (e)<-[:STARTED_AT { startDate: $properties.startDate, endDate: $properties.endDate, timeZone: $properties.timeZone }]-(o)
       CREATE (m:Metadata { key: 'EVENT_TYPE', value: $properties.type })
       CREATE (e)-[:HAS_METADATA]->(m)
