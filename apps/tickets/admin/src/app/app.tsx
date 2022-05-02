@@ -72,8 +72,8 @@ SuperTokens.init({
 
 Session.addAxiosInterceptors(axios);
 const initialGlobalState: CurrentUser = {
-  userId: "", name: "", email: "", picture: "", defaultOrganizationId: "",
-  defaultOrganizationName: ""
+  userId: "", name: "", email: "", picture: "", defaultLanguage: "",
+  defaultOrganizationId: "", defaultOrganizationName: ""
 };
 
 export function App() {

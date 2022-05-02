@@ -9,6 +9,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { FindPersonDto } from '../organization/dto/findperson.dto';
 import { Organization } from '../organization/entity/organization.entity';
+import { toNativeTypes } from '@graph-commerce/common';
 
 @Injectable()
 export class PersonService {
@@ -36,14 +37,15 @@ export class PersonService {
   }
 */
 
-  async get(userId: string): Promise<any> {
+  async get(userId: string): Promise<unknown> {
     const res = await this.neo4jService.read(
       `
       MATCH (p:Person { id: $userId })-[:HAS_METADATA]->(m:Metadata { key: 'DEFAULT_ORGANIZATION' })
-			WITH p, m
+      MATCH (p)-[:HAS_DEFAULT_LANGUAGE]->(l:Language)
 			MATCH (o:Organization { id: m.value })
       RETURN p {
         .*,
+        defaultLanguage: l.alpha_2,
         defaultOrganizationId: o.id,
         defaultOrganizationName: o.name
       } AS person
@@ -51,7 +53,7 @@ export class PersonService {
       { userId },
     );
 
-    return res.records.length ? res.records[0].get('person') : false;
+    return res.records.length ? toNativeTypes(res.records[0].get('person')) : false;
   }
 
   async find(properties: FindPersonDto): Promise<Person[] | boolean> {

@@ -1,3 +1,4 @@
+import { toNativeTypes } from '@graph-commerce/common';
 import { Injectable } from '@nestjs/common';
 import { Neo4jService } from 'nest-neo4j/dist';
 import { CreateTeamDto } from './dto/create-team.dto';
@@ -33,7 +34,7 @@ export class TeamService {
         `,
       { teamId },
     );
-    return res.records.length ? res.records[0].get('team') : false;
+    return res.records.length ? toNativeTypes(res.records[0].get('team')) : false;
   }
 
   async create(
@@ -46,11 +47,14 @@ export class TeamService {
 			WITH o, randomUUID() AS uuid
       CREATE (t:Team { id: uuid, name: $properties.name, description: $properties.description })
       CREATE (m:Metadata { key: 'ROLES', value: $properties.roles })
-      CREATE (t)-[:HAS_METADATA { createdBy: $properties.userId, createdAt: datetime(), private: true }]->(m)
+      CREATE (t)-[:HAS_METADATA { createdBy: $userId, createdAt: datetime(), private: true }]->(m)
 			CREATE (t)-[r:BELONGS_TO { createdBy: $userId, createdAt: datetime(), active: true, deleted: false}]->(o)
       RETURN t {
         .*,
-        active: r.active
+        active: r.active,
+        deleted: r.deleted,
+        createdBy: r.createdBy,
+        createdAt: r.createdAt
       } AS team
       `,
       {
@@ -59,7 +63,7 @@ export class TeamService {
       },
     );
 
-    return res.records.length ? res.records[0].get('team') : false;
+    return res.records.length ? toNativeTypes(res.records[0].get('team')) : false;
   }
 
   async enable(teamId: string): Promise<unknown> {
@@ -74,7 +78,7 @@ export class TeamService {
       `,
       { teamId },
     );
-    return res.records.length ? res.records[0].get('team') : false
+    return res.records.length ? toNativeTypes(res.records[0].get('team')) : false
   }
 
   async disable(teamId: string): Promise<unknown> {
@@ -89,7 +93,7 @@ export class TeamService {
       `,
       { teamId },
     );
-    return res.records.length ? res.records[0].get('team') : false
+    return res.records.length ? toNativeTypes(res.records[0].get('team')) : false
   }
 
   async update(
@@ -107,7 +111,7 @@ export class TeamService {
       `,
       { properties },
     );
-		return res.records.length ? res.records[0].get('team') : false
+		return res.records.length ? toNativeTypes(res.records[0].get('team')) : false
   }
 
   async patchPermissions(
@@ -125,7 +129,7 @@ export class TeamService {
       `,
       { properties },
     );
-		return res.records.length ? res.records[0].get('team') : false
+		return res.records.length ? toNativeTypes(res.records[0].get('team')) : false
   }
 
   async getPermissions(
@@ -154,7 +158,7 @@ export class TeamService {
       `,
       { teamId },
     );
-    return res.records.length ? res.records[0].get('team') : false
+    return res.records.length ? toNativeTypes(res.records[0].get('team')) : false
   }
 
   async addMember(teamId: string, userId: string): Promise<unknown> {
@@ -171,7 +175,7 @@ export class TeamService {
       `,
       { teamId, userId },
     );
-    return res.records.length ? res.records[0].get('team') : false
+    return res.records.length ? toNativeTypes(res.records[0].get('team')) : false
   }
 
   async removeMember(teamId: string, userId: string): Promise<unknown> {
@@ -188,7 +192,7 @@ export class TeamService {
       `,
       { teamId, userId },
     );
-    return res.records.length ? res.records[0].get('team') : false
+    return res.records.length ? toNativeTypes(res.records[0].get('team')) : false
   }
 
 }

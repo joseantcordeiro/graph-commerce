@@ -14,7 +14,7 @@ export class SearchProcessor {
 		private readonly searchService: SearchService) {
 	}
 
-	getIndex(objectId: string): Promise<string> {
+	getOrganization(objectId: string): Promise<string> {
 		return this.neo4jService.read(
 			`
 			MATCH (n { id: $objectId })-[:BELONGS_TO]->(o:Organization)
@@ -32,50 +32,33 @@ export class SearchProcessor {
 
 	@Process('update')
   async update(job: Job) {
-    const doc: Document = job.data.object;
-		let index = await this.getIndex(doc[0].id);
-		if (index === 'ERROR')
-			return;
-		index = job.data.objectType + '-' + index;
-		return this.searchService.updateDocuments(index, [doc[0]]);
+    const doc: Document = [];
+		doc.push(job.data.object);
+		return this.searchService.updateDocuments(job.data.objectType, [doc[0]]);
   }
 
 	@Process('create')
-  async create(job: Job): Promise<any> {
-		const doc: Document = job.data.object;
-		doc[0].deleted = false;
-		doc[0].active = true;
-		let index = await this.getIndex(doc[0].id);
-		if (index === 'ERROR')
-			return;
-		index = job.data.objectType + '-' + index;
-		return this.searchService.addDocuments(index, [doc[0]]);
-  }
-
-	@Process('delete')
-  async delete(job: Job) {
-    const doc: Document = job.data.object;
-		doc[0].deleted = true;
-		let index = await this.getIndex(doc[0].id);
-		if (index === 'ERROR')
-			return;
-		index = job.data.objectType + '-' + index;
-		return this.searchService.updateDocuments(index, [doc[0]]);
+  async create(job: Job) {
+		const doc: Document = [];
+		doc.push(job.data.object);
+		const organizationId = await this.getOrganization(doc[0].id);
+		if (organizationId === 'ERROR') {
+      return;
+    }
+    doc[0].organizationId = organizationId;
+		return this.searchService.addDocuments(job.data.objectType, [doc[0]]);
   }
 
 	@Process('parent')
   async parent(job: Job) {
-    const doc: Document = job.data.object;
+    const doc: Document = [];
+		doc.push(job.data.object);
 		doc[0].parentId = job.data.parentId;
-		let index = await this.getIndex(doc[0].id);
-		if (index === 'ERROR')
-			return;
-		index = job.data.objectType + '-' + index;
-		return this.searchService.updateDocuments(index, [doc[0]]);
+		return this.searchService.updateDocuments(job.data.objectType, [doc[0]]);
   }
 
 	@OnQueueActive()
-	async onActive(job: Job<unknown>) {
+	async onActive(job: Job) {
 		this.logger.info(`[SearchProcessor] Job ${job.id} started. Data:`, job.data);
 	}
 

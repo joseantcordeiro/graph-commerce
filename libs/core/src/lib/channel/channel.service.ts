@@ -1,3 +1,4 @@
+import { toNativeTypes } from '@graph-commerce/common';
 import { Injectable } from '@nestjs/common';
 import { Neo4jService } from 'nest-neo4j';
 import { CreateChannelDto } from './dto/create-channel.dto';
@@ -13,11 +14,14 @@ export class ChannelService {
       .read(
         `
 				MATCH (c:Channel {id: $channelId})-[r:BELONGS_TO { deleted: false } ]->(o:Organization)
-			  RETURN c
+			  RETURN c {
+          .*,
+          active: r.active
+        } AS channel
 			  `,
         { channelId },
       );
-			return res.records.length ? res.records.map((row) => new Channel(row.get('c'))) : false;
+			return res.records.length ? toNativeTypes(res.records[0].get('channel')) : false;
   }
 
 	async list(userId: string): Promise<Channel[] | unknown> {
@@ -35,55 +39,68 @@ export class ChannelService {
 
   async create(userId: string,
     properties: CreateChannelDto,
-  ): Promise<Channel[] | unknown> {
+  ): Promise<unknown> {
     const res = await this.neo4jService.write(
       `
 			MATCH (o:Organization { id: $properties.organizationId }),(a:Currency { code: $properties.defaultCurrency }), (c:Country { iso_2: $properties.defaultCountry })
 			WITH o, a, c, randomUUID() AS uuid
 			CREATE (m:Channel { id: uuid, name: $properties.name })
-			CREATE (o)<-[:BELONGS_TO { createdBy: $userId, createdAt: datetime(), active: $properties.active, deleted: false }]-(m)
+			CREATE (o)<-[r:BELONGS_TO { createdBy: $userId, createdAt: datetime(), active: $properties.active, deleted: false }]-(m)
 			CREATE (m)-[:HAS_DEFAULT_COUNTRY]->(c)
 			CREATE (m)-[:HAS_DEFAULT_CURRENCY]->(a)
-			RETURN m
+			RETURN m {
+        .*,
+        active: r.active,
+        deleted: r.deleted,
+        createdBy: r.createdBy,
+        createdAt: r.createdAt
+      } AS channel
 	  `,
       {
         userId, properties,
       },
     );
 
-		return res.records.length ? res.records.map((row) => new Channel(row.get('m'))) : false;
+		return res.records.length ? toNativeTypes(res.records[0].get('channel')) : false;
 
   }
 
   async update(
     properties: UpdateChannelDto,
-  ): Promise<Channel[] | unknown> {
+  ): Promise<unknown> {
     const res = await this.neo4jService.write(
       `
 		MATCH (c:Channel {id: $properties.channelId})-[r:BELONGS_TO]->(o:Organization)
 		WITH c, r
 		SET c.name = $properties.name
 		SET r.updatedAt = datetime(), r.active = $properties.active
-		RETURN c
+		RETURN c {
+        .*,
+        updatedAt: r.updatedAt,
+        active: r.active
+      } AS channel
 	  `,
       {
         properties,
       },
     );
-    return res.records.length ? res.records.map((row) => new Channel(row.get('c'))) : false;
+    return res.records.length ? toNativeTypes(res.records[0].get('channel')) : false;
   }
 
-  async delete(userId, properties): Promise<Channel[] | unknown> {
+  async delete(userId, properties): Promise<unknown> {
     const res = await this.neo4jService.write(
       `
 			MATCH (c:Channel {id: $properties.channelId})-[r:BELONGS_TO]->(o:Organization)
 			SET r.deletedBy = $userId, r.deleted = true, r.channelTargetId = $properties.targetChannelId
-			RETURN c
+			RETURN c {
+        .*,
+        deleted: r.deleted
+      } AS channel
 			`,
       {
         userId, properties,
       },
     );
-		return res.records.length ? res.records.map((row) => new Channel(row.get('c'))) : false;
+		return res.records.length ? toNativeTypes(res.records[0].get('channel')) : false;
   }
 }

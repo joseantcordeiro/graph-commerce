@@ -51,7 +51,7 @@ export function Account(props: AccountProps) {
 		  loadData();
 	}, []);
 
-  const initialValues: FormValues = { name: props.currentUser.name, defaultLanguage: 'en' };
+  const initialValues: FormValues = { name: props.currentUser.name, defaultLanguage: props.currentUser.defaultLanguage };
 
   return (
     <div className="container">

@@ -7,6 +7,7 @@ export type CurrentUser = {
   name: string;
 	email: string;
 	picture: string;
+  defaultLanguage: string;
 	defaultOrganizationId: string;
 	defaultOrganizationName: string;
 }

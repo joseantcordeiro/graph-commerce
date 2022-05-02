@@ -5,6 +5,9 @@ import { BullModule } from '@nestjs/bull';
 
 @Module({
 	imports: [
+    BullModule.registerQueue({
+      name: 'search',
+    }),
 		BullModule.registerQueue({
       name: 'team',
     }),

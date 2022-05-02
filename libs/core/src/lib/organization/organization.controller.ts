@@ -48,17 +48,15 @@ export class OrganizationController {
     @Body() properties: CreateOrganizationDto,
   ) {
     const userId = session.getUserId();
-    const organizations = await this.organizationService.create(
+    const organization = await this.organizationService.create(
       userId,
       properties,
     );
-		if (Array.isArray(organizations)) {
+		if (organization !== false) {
 			this.organizationQueue.add('create', {
-				organization: organizations.map(m => m.toJson()),
+				organization: organization,
 			});
-			return {
-				results: organizations.map(m => m.toJson()),
-			};
+			return organization;
 		}
 		throw new HttpException('Organization couldn\'t be created', HttpStatus.NOT_MODIFIED);
   }
@@ -70,14 +68,12 @@ export class OrganizationController {
   async patchOrganization(
     @Body() properties: UpdateOrganizationDto,
   ) {
-			const organizations = await this.organizationService.update(properties);
-			if (Array.isArray(organizations)) {
+			const organization = await this.organizationService.update(properties);
+			if (organization !== false) {
 				this.organizationQueue.add('update', {
-					organization: organizations.map(m => m.toJson()),
+					organization: organization,
 				});
-				return {
-					results: organizations.map(m => m.toJson()),
-				};
+				return organization;
 			}
 			throw new HttpException('Organization couldn\'t be updated', HttpStatus.NOT_MODIFIED);
 
@@ -90,14 +86,14 @@ export class OrganizationController {
   async deleteOrganization(@Param('organizationId') organizationId: string,
 		@Session() session: SessionContainer) {
     const userId = session.getUserId();
-		const organizations = await this.organizationService.delete(userId, organizationId);
-		if (Array.isArray(organizations)) {
-			this.organizationQueue.add('delete', {
-				organization: organizations.map(m => m.toJson()),
+		const organization = await this.organizationService.delete(userId, organizationId);
+		if (organization !== false) {
+			this.organizationQueue.add('update', {
+				organization: organization,
 			});
 			return {
 				message: 'Organization marked as deleted successfully',
-				results: organizations.map(m => m.toJson()),
+				organization,
 			};
 		}
     throw new HttpException('Organization couldn\'t be deleted', HttpStatus.NOT_MODIFIED);

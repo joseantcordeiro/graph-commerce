@@ -26,7 +26,8 @@ import { Queue } from 'bull';
 @Controller('team')
 @UseInterceptors(CacheInterceptor)
 export class TeamController {
-  constructor(@InjectQueue('team') private readonly teamQueue: Queue,
+  constructor(@InjectQueue('search') private readonly searchQueue: Queue,
+    @InjectQueue('team') private readonly teamQueue: Queue,
 		private readonly teamService: TeamService) {}
 
   @Post()
@@ -44,8 +45,9 @@ export class TeamController {
     );
 
 		if (team !== false) {
-			this.teamQueue.add('create', {
-				userId: userId, team: team,
+			this.searchQueue.add('create', {
+				objectType: 'team',
+				object: team,
 			});
 			return team;
 		}
@@ -63,8 +65,9 @@ export class TeamController {
 		const userId = session.getUserId();
 		const team = await this.teamService.update(properties);
 		if (team !== false) {
-			this.teamQueue.add('update', {
-				userId: userId, team: team,
+			this.searchQueue.add('update', {
+				objectType: 'team',
+				object: team,
 			});
 			return team;
 		}
@@ -106,6 +109,10 @@ export class TeamController {
     @Param('teamId') teamId: string) {
     const team = await this.teamService.enable(teamId);
     if (team !== false) {
+      this.searchQueue.add('update', {
+				objectType: 'team',
+				object: team,
+			});
       return team;
     }
     throw new HttpException('Team not found', HttpStatus.NOT_FOUND);
@@ -119,6 +126,10 @@ export class TeamController {
     @Param('teamId') teamId: string) {
     const team = await this.teamService.disable(teamId);
     if (team !== false) {
+      this.searchQueue.add('update', {
+				objectType: 'team',
+				object: team,
+			});
       return team;
     }
     throw new HttpException('Team not found', HttpStatus.NOT_FOUND);
@@ -132,6 +143,10 @@ export class TeamController {
     @Param('teamId') teamId: string) {
     const team = await this.teamService.delete(teamId);
     if (team !== false) {
+      this.searchQueue.add('update', {
+				objectType: 'team',
+				object: team,
+			});
       return {
         message: 'Team deleted successfully',
         team: team

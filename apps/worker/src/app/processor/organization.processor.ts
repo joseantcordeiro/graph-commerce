@@ -6,8 +6,9 @@ import { Neo4jService } from 'nest-neo4j';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { Channel } from '@graph-commerce/core';
-import { SearchService, CreateIndexDto } from '@graph-commerce/search';
+import { SearchService } from '@graph-commerce/search';
 import { OrganizationDefaultConfig } from '../config/organization-default-config';
+import { toNativeTypes } from '@graph-commerce/common';
 
 @Processor('organization')
 export class OrganizationProcessor {
@@ -15,15 +16,20 @@ export class OrganizationProcessor {
 		private readonly searchService: SearchService,
 		private readonly neo4jService: Neo4jService) {}
 
-		async getDefaultChannel(objectId: string): Promise<Channel[] | any> {
+		async getDefaultChannel(objectId: string): Promise<unknown> {
 			const res = await this.neo4jService.read(
 				`
-				MATCH (c:Channel)-[:BELONGS_TO]->(o:Organization { id: $objectId })
-				RETURN c
+				MATCH (c:Channel)-[r:BELONGS_TO]->(o:Organization { id: $objectId })
+				RETURN c {
+          .*,
+          active: r.active,
+          deleted: r.deleted,
+          createdAt: r.createdAt
+        } AS channel
 				`,
 				{ objectId },
 			);
-			return res.records.length ? res.records.map((row) => new Channel(row.get('c'))) : 'ERROR';
+			return res.records.length ? toNativeTypes(res.records[0].get('channel')) : 'ERROR';
 
 		}
 
@@ -44,18 +50,19 @@ export class OrganizationProcessor {
 
 	@Process('update')
   async update(job: Job) {
-    const doc: Document = job.data.organization;
+    const doc: Document = [];
+		doc.push(job.data.organization);
 		const index = "organization";
 		return this.searchService.updateDocuments(index, [doc[0]]);
   }
 
 	@Process('create')
   async create(job: Job) {
-		let doc: Document = job.data.organization;
-		let index = "organization";
-		this.searchService.addDocuments(index, [doc[0]])
-		const objectId = doc[0].id;
-    this.addConfigMetadata(objectId);
+    const doc: Document = [];
+		doc.push(job.data.organization);
+		this.searchService.addDocuments("organization", [doc[0]])
+		const organizationId = doc[0].id;
+    /** this.addConfigMetadata(objectId);
 		const createIndex: CreateIndexDto = {
 			uid: "group-" + objectId,
 			primaryKey: "id",
@@ -76,21 +83,15 @@ export class OrganizationProcessor {
 		this.searchService.setFilterableAttributes(createIndex.uid, [
 			"deleted",
 			"active"
-		]);
-		const channel = await this.getDefaultChannel(objectId);
-		if (channel === 'ERROR')
-			return
-		doc = channel.map(m => m.toJson());
-		doc[0].active = true;
-		doc[0].deleted = false;
-		index = 'channel-' + objectId;
-		return this.searchService.addDocuments(index, [doc[0]]);
-  }
-
-	@Process('delete')
-  async delete(job: Job) {
-    this.logger.info(`[OrganizationProcessor] Job ${job.id}-delete process. Data:`, job.data);
-    return {};
+		]); */
+		const channel = await this.getDefaultChannel(organizationId);
+		if (channel === 'ERROR') {
+      return;
+    }
+    const doc1: Document = [];
+		doc1.push(channel);
+    doc1[0].organizationId = organizationId;
+		return this.searchService.addDocuments("channel", [doc1[0]]);
   }
 
 	@OnQueueActive()

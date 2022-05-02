@@ -37,14 +37,14 @@ export function Navbar(props: NavbarProps) {
   return (
     <nav className='navbar' role='navigation' aria-label='main navigation'>
       <div className='navbar-brand'>
-        <a href='/' className='navbar-item'>
+        <Link to='/' className='navbar-item'>
           <img
             src='https://bulma.io/images/bulma-logo.png'
             alt='Logo'
             width='112'
             height='28'
           />
-        </a>
+        </Link>
 
         <a
           onClick={() => {
@@ -64,21 +64,21 @@ export function Navbar(props: NavbarProps) {
 
       <div id='navbarBasicExample' className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
         <div className="navbar-start">
-          <a className="navbar-item" href="/">
+          <Link className="navbar-item" to="/">
           <span className="icon">
               <i className="fa fa-home"></i>
             </span>
           <span>{props.currentUser.defaultOrganizationName}</span>
-          </a>
+          </Link>
           <OrgDropDown currentUser={props.currentUser}/>
 
-          <a className="navbar-item" href="/group">
-            Groups
-          </a>
+          <Link className="navbar-item" to="/group">
+            Teams
+          </Link>
 
-          <a className="navbar-item" href="/settings">
+          <Link className="navbar-item" to="/settings">
             Settings
-          </a>
+          </Link>
         </div>
       </div>
 

@@ -64,15 +64,13 @@ export class ChannelController {
     @Body() properties: CreateChannelDto
   ) {
 		const userId = session.getUserId();
-    const channels = await this.channelService.create(userId, properties);
-		if (Array.isArray(channels)) {
+    const channel = await this.channelService.create(userId, properties);
+		if (channel !== false) {
 			this.searchQueue.add('create', {
 				objectType: 'channel',
-				object: channels.map(m => m.toJson()),
+				object: channel,
 			});
-			return {
-				results: channels.map(m => m.toJson()),
-			};
+			return channel;
 		}
 		throw new HttpException('Channel couldn\'t be created', HttpStatus.NOT_MODIFIED);
   }
@@ -84,15 +82,13 @@ export class ChannelController {
   async patchChannel(
     @Body() properties: UpdateChannelDto,
   ) {
-		const channels = await this.channelService.update(properties);
-		if (Array.isArray(channels)) {
+		const channel = await this.channelService.update(properties);
+		if (channel !== false) {
 			this.searchQueue.add('update', {
 				objectType: 'channel',
-				object: channels.map(m => m.toJson()),
+				object: channel,
 			});
-			return {
-				results: channels.map(m => m.toJson()),
-			};
+			return channel;
 		}
 		throw new HttpException('Organization couldn\'t be updated', HttpStatus.NOT_MODIFIED);
   }
@@ -105,15 +101,15 @@ export class ChannelController {
 		@Body() properties: DeleteChannelDto,
 	) {
     const userId = session.getUserId();
-    const channels = this.channelService.delete(userId, properties);
-		if (Array.isArray(channels)) {
-			this.searchQueue.add('delete', {
+    const channel = await this.channelService.delete(userId, properties);
+		if (channel !== false) {
+			this.searchQueue.add('update', {
 				objectType: 'channel',
-				object: channels.map(m => m.toJson()),
+				object: channel,
 			});
 			return {
 				message: 'Channel marked to delete',
-				results: channels.map(c => c.toJson()),
+				channel,
 			}
 		}
 		throw new HttpException('Channel couldn\'t be deleted', HttpStatus.NOT_MODIFIED);
